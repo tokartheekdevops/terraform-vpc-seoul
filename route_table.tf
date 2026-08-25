@@ -7,8 +7,9 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name      = "${var.project_name}-public-route-table"
-    ManagedBy = "Terraform"
+    Name        = "${var.project_name}-public-route-table"
+    Environment = "lab"
+    ManagedBy   = "Terraform"
   }
 }
 
