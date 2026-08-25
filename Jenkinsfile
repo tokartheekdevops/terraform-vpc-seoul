@@ -47,7 +47,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 sh '''
-                    terraform init -input=false -migrate-state
+                    terraform init -input=false
                 '''
             }
         }
@@ -63,7 +63,9 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 sh '''
-                    terraform plan -input=false -out=tfplan
+                    terraform plan \
+                        -input=false \
+                        -out=tfplan
                 '''
             }
         }
@@ -71,7 +73,10 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 sh '''
-                    terraform apply -input=false -auto-approve tfplan
+                    terraform apply \
+                        -input=false \
+                        -auto-approve \
+                        tfplan
                 '''
             }
         }
@@ -94,15 +99,17 @@ pipeline {
         success {
             echo "========================================"
             echo "SUCCESS"
+            echo "========================================"
             echo "Terraform infrastructure created successfully."
-            echo "Target region: ap-northeast-2"
-            echo "Jenkins worker: djworker3"
+            echo "Jenkins Worker : djworker3"
+            echo "AWS Region     : ap-northeast-2"
             echo "========================================"
         }
 
         failure {
             echo "========================================"
             echo "FAILED"
+            echo "========================================"
             echo "Terraform pipeline failed."
             echo "Check the Jenkins Console Output."
             echo "========================================"
