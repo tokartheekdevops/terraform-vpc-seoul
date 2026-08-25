@@ -8,11 +8,9 @@ resource "aws_instance" "web" {
     aws_security_group.web.id
   ]
 
-  key_name = aws_key_pair.main.key_name
+  associate_public_ip_address = true
 
   user_data = file("${path.module}/user-data.sh")
-
-  associate_public_ip_address = true
 
   tags = {
     Name        = "${var.project_name}-web-server"
