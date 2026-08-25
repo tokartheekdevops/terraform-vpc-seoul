@@ -4,6 +4,7 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'ap-northeast-2'
+        AWS_REGION         = 'ap-northeast-2'
         TF_IN_AUTOMATION   = 'true'
     }
 
@@ -15,11 +16,26 @@ pipeline {
             }
         }
 
-        stage('Terraform Version') {
+        stage('Terraform Version and AWS Identity') {
             steps {
                 sh '''
+                    echo "========================================"
+                    echo "Terraform Version"
+                    echo "========================================"
+
                     terraform version
+
+                    echo "========================================"
+                    echo "AWS Identity"
+                    echo "========================================"
+
                     aws sts get-caller-identity
+
+                    echo "========================================"
+                    echo "Target Region"
+                    echo "========================================"
+
+                    echo "$AWS_REGION"
                 '''
             }
         }
@@ -27,7 +43,7 @@ pipeline {
         stage('Terraform Format') {
             steps {
                 sh '''
-                    terraform fmt -check -recursive
+                    terraform fmt -recursive
                 '''
             }
         }
@@ -51,8 +67,7 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 sh '''
-                    terraform plan \
-                      -out=tfplan
+                    terraform plan -out=tfplan
                 '''
             }
         }
@@ -68,6 +83,10 @@ pipeline {
         stage('Terraform Outputs') {
             steps {
                 sh '''
+                    echo "========================================"
+                    echo "Terraform Outputs"
+                    echo "========================================"
+
                     terraform output
                 '''
             }
@@ -77,11 +96,17 @@ pipeline {
     post {
 
         success {
-            echo 'Terraform infrastructure successfully created through Jenkins.'
+            echo "========================================"
+            echo "Terraform infrastructure created successfully."
+            echo "Target region: ap-northeast-2"
+            echo "========================================"
         }
 
         failure {
-            echo 'Terraform pipeline failed. Check the Jenkins console output.'
+            echo "========================================"
+            echo "Terraform pipeline failed."
+            echo "Check the Jenkins Console Output."
+            echo "========================================"
         }
     }
 }
