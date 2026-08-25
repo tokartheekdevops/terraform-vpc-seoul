@@ -63,9 +63,7 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 sh '''
-                    terraform plan \
-                        -input=false \
-                        -out=tfplan
+                    terraform plan -input=false -out=tfplan
                 '''
             }
         }
@@ -73,10 +71,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 sh '''
-                    terraform apply \
-                        -input=false \
-                        -auto-approve \
-                        tfplan
+                    terraform apply -input=false -auto-approve tfplan
                 '''
             }
         }
