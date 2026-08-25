@@ -6,6 +6,7 @@ resource "aws_subnet" "public_1" {
 
   tags = {
     Name      = "${var.project_name}-public-subnet-1"
+    Environment = "lab"
     ManagedBy = "Terraform"
   }
 }
@@ -18,6 +19,7 @@ resource "aws_subnet" "public_2" {
 
   tags = {
     Name      = "${var.project_name}-public-subnet-2"
+    Environment = "lab"
     ManagedBy = "Terraform"
   }
 }
