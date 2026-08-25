@@ -1,6 +1,8 @@
 pipeline {
 
-    agent any
+    agent {
+        label 'djworker3'
+    }
 
     environment {
         AWS_DEFAULT_REGION = 'ap-northeast-2'
@@ -9,12 +11,6 @@ pipeline {
     }
 
     stages {
-
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
 
         stage('Terraform Version and AWS Identity') {
             steps {
@@ -51,7 +47,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 sh '''
-                    terraform init
+                    terraform init -input=false -migrate-state
                 '''
             }
         }
@@ -67,7 +63,9 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 sh '''
-                    terraform plan -out=tfplan
+                    terraform plan \
+                        -input=false \
+                        -out=tfplan
                 '''
             }
         }
@@ -75,7 +73,10 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 sh '''
-                    terraform apply -auto-approve tfplan
+                    terraform apply \
+                        -input=false \
+                        -auto-approve \
+                        tfplan
                 '''
             }
         }
@@ -97,13 +98,16 @@ pipeline {
 
         success {
             echo "========================================"
+            echo "SUCCESS"
             echo "Terraform infrastructure created successfully."
             echo "Target region: ap-northeast-2"
+            echo "Jenkins worker: djworker3"
             echo "========================================"
         }
 
         failure {
             echo "========================================"
+            echo "FAILED"
             echo "Terraform pipeline failed."
             echo "Check the Jenkins Console Output."
             echo "========================================"
