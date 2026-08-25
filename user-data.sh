@@ -14,11 +14,33 @@ cat > /var/www/html/index.html <<'EOF'
 <html>
 <head>
     <title>Terraform Jenkins Infrastructure</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        h1 {
+            font-size: 40px;
+        }
+
+        p {
+            font-size: 22px;
+        }
+    </style>
 </head>
+
 <body>
+
     <h1>This infrastructure is created by Terraform through Jenkins</h1>
-    <p>Region: ap-northeast-2 (Seoul)</p>
+
+    <p>Region: ap-northeast-2</p>
+
+    <p>Location: Seoul</p>
+
     <p>Application: Nginx</p>
+
 </body>
 </html>
 EOF
